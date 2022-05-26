@@ -45,7 +45,7 @@ export const Manage = () => {
 
         setMessage('Loading...');
 
-        fetch(`http://localhost:${config.host.port}/event`, {
+        fetch(`https://git.heroku.com/acetennis.git/event`, {
             method: "POST",
             headers: {
                 'Access-Control-Allow-Origin': 'content-type',

@@ -18,7 +18,7 @@ export const Members = () => {
         }
 
         setStatus('Loading...');
-        fetch(`http://localhost:${config.host.port}/members?level=${optionRef.current.value}`, {
+        fetch(`https://git.heroku.com/acetennis.git/members?level=${optionRef.current.value}`, {
             method: "GET",
             headers: {
                 'Content-Type': "application/json"

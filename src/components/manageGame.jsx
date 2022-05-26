@@ -30,7 +30,7 @@ export const ManageGame = () => {
         setError('Loading...');
         setLevel(level);
 
-        fetch(`http://localhost:${config.host.port}/players/${data.date}`, {
+        fetch(`hhttps://git.heroku.com/acetennis.git/players/${data.date}`, {
             method: "GET",
             headers: {
                 'Content-Type': "application/json"
@@ -86,7 +86,7 @@ export const ManageGame = () => {
         selectedPlayers.forEach((item, index) => {
             // console.log(JSON.stringify(data));
             setError('Loading...');
-            fetch(`http://localhost:${config.host.port}/matches`, {
+            fetch(`https://git.heroku.com/acetennis.git/matches`, {
                 method: "POST",
                 headers: {
                     'Content-Type': "application/json"

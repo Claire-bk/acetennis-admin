@@ -18,7 +18,7 @@ export const MyUserForm = () => {
 
         setStatus("Loading...");
         
-        fetch("http://localhost:8081/auth/signup", {
+        fetch("https://git.heroku.com/acetennis.git/auth/signup", {
             method: "POST",
             headers: {
                 'Content-Type': "application/json"

@@ -24,7 +24,7 @@ export const Results = () => {
         const date = event.getDate();
         const newDate = `${year}-${month}-${date}`;
 
-        fetch(`http://localhost:8081/matches?date=${newDate}`, {
+        fetch(`https://git.heroku.com/acetennis.git/matches?date=${newDate}`, {
             method: "GET",
             headers: {
                 'content-type': "application/json"
@@ -42,6 +42,7 @@ export const Results = () => {
                     scoreA:match.scoreA,
                     scoreB:match.scoreB
                 }});
+            // console.log(results);
             setMatches(results);
         })
         .catch(error => {

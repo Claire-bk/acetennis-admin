@@ -23,7 +23,7 @@ export const Dashboard = () => {
             ? navigate(navName, { replace: true }) : navigate('/', { replace: true })
     }
 
-    fetch("http://localhost:8081/auth/count", {
+    fetch("https://git.heroku.com/acetennis.git/auth/count", {
             method: "GET",
             headers: {
                 'content-type': "application/json"
