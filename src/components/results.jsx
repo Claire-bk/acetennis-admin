@@ -8,7 +8,7 @@ import { Result } from './result';
 
 export const Results = () => {
     const navigate = useNavigate();
-    const [matches, setMatches] = useState([]);//{courtNum:1, playerA1:"", playerA2:"", playerB1:"", playerB2:"", scoreA:"", scoreB:""});
+    const [matches, setMatches] = useState([]);
 
     useEffect(() => {
         const isLogin = sessionStorage.getItem('isLogin');
@@ -42,7 +42,6 @@ export const Results = () => {
                     scoreA:match.scoreA,
                     scoreB:match.scoreB
                 }});
-            // console.log(results);
             setMatches(results);
         })
         .catch(error => {
@@ -53,7 +52,7 @@ export const Results = () => {
     return (
         <>
             <Calendar className="m-auto mt-1.5 mb-3" onClickDay={handleDay} />
-            <div className='md:flex justify-center'>
+            <div className='sm:flex justify-center'>
                 {
                     matches && matches.map((match, index) => <Result 
                         key={index}

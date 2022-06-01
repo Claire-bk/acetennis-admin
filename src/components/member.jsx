@@ -1,6 +1,6 @@
 import React from 'react';
 
-const liClassName = "md:flex border boder-black rounded-lg m-2 p-2 text-slate-500";
+const liClassName = "sm:flex border boder-black rounded-lg m-2 p-2 text-slate-500";
 const spanClassName = "flex-none w-32 p-2";
 const buttonClassName = "flex-none w-20 p-2";
 

@@ -15,12 +15,12 @@ export const Header = () => {
     }
 
     return (
-        <header className='header md:flex justify-between bg-gradient-to-r from-color-dark-yellow to-color-orange p-4'>
+        <header className='header sm:flex justify-between bg-gradient-to-r from-color-dark-yellow to-color-orange p-4'>
             <div className='logo'>
                 <span className="material-icons text-4xl text-white pr-2">sports_tennis</span>
                 <span className='text-white text-4xl pl-2'>Ace Tennis</span>
             </div>
-            <ul className="navBar__menu md:flex">
+            <ul className="navBar__menu sm:flex">
                 <li className="p-2 text-white hover:text-fuchsia-600 hover:cursor-pointer" onClick={handleGoHome}>Home</li>
                 <li className="p-2 text-white hover:text-fuchsia-600 hover:cursor-pointer" onClick={handleLogout}>Logout</li>
             </ul>        

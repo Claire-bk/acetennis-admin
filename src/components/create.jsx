@@ -7,16 +7,14 @@ import 'react-calendar/dist/Calendar.css';
 import { config } from '../../config';
 
 export const Create = () => {
+    let btnClassName = 'm-4 ml-4 p-2 border-none rounded-md bg-color-dark-pink text-white w-40  ';
     const today = new Date();
-    const currMonth = today.getMonth();
-    const currYear = today.getFullYear();
-    const dateString = today.toISOString().split('T')[0];
-    const [data, setData] = useState({date: dateString, courtNum: 1});
     const [resMessage, setMessage] = useState("");
     const [selectedDate, setSelectedDate] = useState();
-    const inputRef = React.createRef();
+    const [upcomingMsg, setUpcomingMessage] = useState("");
+    const [upcomingDate, setUpcomingDate] = useState("");
     const navigate = useNavigate();
-    const url = `http://localhost:8081/event?month=${currMonth+1}&year=${currYear}&date=`;//?date=${fullDate};
+    const url = `https://git.heroku.com/acetennis.git/event?month=&year=&date=`;
 
     useEffect(() => {
         const isLogin = sessionStorage.getItem('isLogin');
@@ -33,25 +31,25 @@ export const Create = () => {
         })
         .then(res => res.json())
         .then(res => {
-            let year = "";
-            let month = "";
-            let date = "";
+            // check if upcoming event is already passed
+            const eventDate = new Date(res.date);
+            const year = eventDate.getFullYear();
+            const month = eventDate.getMonth() + 1;
+            const date = eventDate.getDate();
+            const fullDate = `${year}-${month}-${date}`;
 
-            console.log(res)
-            const resDate = res.map(res => {
-                const mapDate = res.date;
-                const onlyDate = mapDate.split('T')[0];
-                // year = onlyDate.split('-')[0];
-                // month = onlyDate.split('-')[1];
-                // date = onlyDate.split('-')[2];
-                // console.log(new Date(parseInt(year), parseInt(month)-1, parseInt(date))
-                // return onlyDate;
-                // return new Date(parseInt(year), parseInt(month)-1, parseInt(date));
-                return onlyDate;
-            });
-            console.log(resDate)
-            
-            setSelectedDate(resDate);
+            // if upcoming event is already passed
+            if(today - eventDate > 0) {
+                // set new upcoming event
+                setUpcomingMessage("");
+                setUpcomingDate("");
+            } else {
+                setUpcomingDate(fullDate);
+                setUpcomingMessage(`Upcoming event is on ${fullDate}`);
+                localStorage.setItem('UpcomingMatch', `${fullDate}`);
+                // btnClassName = btnClassName + 'invisible';
+                // console.log(`classname ${btnClassName}`)
+            }
         })
         .catch(error => {
             console.log(error);
@@ -60,7 +58,7 @@ export const Create = () => {
     }, []);
 
     // Make 2 digit of number to compare selectedDate
-    function adjustEventDate(event) {
+    function adjustDate(event) {
         const year = event.getFullYear();
         const month = event.getMonth() + 1;
         const monthStr = month < 10 ? `0${month}` : month;
@@ -72,51 +70,35 @@ export const Create = () => {
     }
 
     function handleDay(event) {
-        const newDate = adjustEventDate(event);
-        const includes = selectedDate.includes(newDate);
-
-        const newData = {...data, date: newDate};
-        setData(newData);
-
-        if(includes) {
-            setMessage("Already Created");
-        } else {
-            setMessage("");
+        if(today - event > 0) {
+            setMessage("You can't choose the past date.");
+            return;
         }
-    }
 
-    function handleEnter() {
         setMessage("");
-        const newData = {...data, courtNum: inputRef.current.value};
-        setData(newData);
+        const newDate = adjustDate(event);
+        setSelectedDate(newDate);
     }
 
     function handleCreate(){
-        if(!inputRef.current.value) {
-            setMessage('Enter court number');
+        if(upcomingDate !== "") {
+            setMessage("Upcoming event is already created");
             return;
         }
-
-        const includes = selectedDate.includes(data.date);
-        console.log(`data.date ${data.date}`)
-        if(includes) {
-            setMessage("Already Created");
-            return;
-        }
-
         setMessage('Loading...');
 
         fetch(`https://git.heroku.com/acetennis.git/event`, {
             method: "POST",
             headers: {
-                'Access-Control-Allow-Origin': 'content-type',
                 'Content-Type': "application/json"
             },
-            body: JSON.stringify({"date":data.date})
+            body: JSON.stringify({"date":selectedDate})
         })
         .then(response => {
-            setMessage("");
-            navigate("/manage_game", { state: data }); 
+            setMessage("Upcoming event created");
+            setUpcomingDate(selectedDate);
+            setUpcomingMessage(`Upcoming event is on ${selectedDate}`);
+            // navigate("/manage_game", { state: data }); 
         })
         .catch(error => {
             console.error("Client error: " + error);
@@ -124,18 +106,13 @@ export const Create = () => {
     }
 
     return (
-        <>
+        <div className='sm:flex flex-col items-center'>
+            <h1 className='m-5 text-4xl text-color-mint text-center'>Create upcoming event</h1>
+            <h2 className='m-5 text-xl text-slate-500 text-center'>{upcomingMsg}</h2>
             <Calendar className="m-auto mt-1.5" onClickDay={handleDay} />
-            <div className='text-center mt-3'>
-                <span className='mt-2 p-4 text-xl text-slate-500'>{data.date}</span>
-                <div className='p-4'>
-                    <label className='mt-2 p-4 text-xl text-slate-500' htmlFor="">How many courts?  </label>
-                    <input className='border p-2 w-12' type="number" ref={inputRef} onClick={handleEnter} />
-                </div>
-                <button className='ml-4 p-2 border-none rounded-md bg-color-dark-pink text-white' onClick={handleCreate}>Create</button>
-            </div>
+            <button className={btnClassName} onClick={handleCreate}>Create</button>
             <span className='block m-2 text-center text-2xl text-red-500'>{resMessage}</span>
-        </>
+        </div>
     );
 };
 

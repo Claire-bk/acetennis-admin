@@ -46,6 +46,7 @@ export const ManageGame = () => {
             setError("");
         })
         .catch(error => {
+            setError("");
             console.log("Client error: " + error);
         })
     }, []);
@@ -117,9 +118,9 @@ export const ManageGame = () => {
     }
 
     return (
-        <div className='md:flex flex-col justify-center mt-2'>
+        <div className='sm:flex flex-col justify-center mt-2'>
             <button className='ml-4 p-2 border-none rounded-md bg-color-dark-pink text-white text-center' onClick={handleSave}>Save</button>
-            <div className='md:flex justify-center'>
+            <div className='sm:flex justify-center'>
                 {
                         courtArr && courtArr.map((num, index) => <Game key={index} court={num} level={courtLevel[index]}  players={players} 
                         onLevelChange={handleLevel}
