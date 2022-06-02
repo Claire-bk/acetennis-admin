@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import { useFormState } from 'react-hook-form';
-import { config } from '../../config';
-import { Result } from './result';
 
 export const Results = () => {
+    const spanClassName = 'p-2 text-color-dark-pink hover:text-violet-700 hover:cursor-pointer';
+    const listClassName = 'p-2 mr-4 text-slate-500 hover:cursor-pointer';
     const navigate = useNavigate();
-    const [matches, setMatches] = useState([]);
+    const [matches, setMatches] = useState();
 
     useEffect(() => {
         const isLogin = sessionStorage.getItem('isLogin');
@@ -16,15 +13,8 @@ export const Results = () => {
             navigate("/", { replace: true });
             return;
         }
-    }, []);
 
-    function handleDay(event) {
-        const year = event.getFullYear();
-        const month = event.getMonth() + 1;
-        const date = event.getDate();
-        const newDate = `${year}-${month}-${date}`;
-
-        fetch(`https://git.heroku.com/acetennis.git/matches?date=${newDate}`, {
+        fetch(`https://git.heroku.com/acetennis.git/event?date=all`, {
             method: "GET",
             headers: {
                 'content-type': "application/json"
@@ -34,38 +24,52 @@ export const Results = () => {
         .then(response => {
             const results = response.map(match => {
                 return {
-                    courtNum:match.courtNum,
-                    playerA1:match.playerA1,
-                    playerA2:match.playerA2,
-                    playerB1:match.playerB1,
-                    playerB2:match.playerB2,
-                    scoreA:match.scoreA,
-                    scoreB:match.scoreB
-                }});
+                    id:match.id,
+                    date:getFormatDate(new Date(match.date))
+                    }
+                });
             setMatches(results);
         })
         .catch(error => {
             console.log(error);
         })
-   }
+    }, []);
+
+    function getFormatDate (date) {
+        let month = (date.getMonth() + 1).toString();
+        let day = date.getDate().toString();
+        let year = date.getFullYear();
+        if (month.length < 2) {
+          month = '0' + month;
+        }
+        if (day.length < 2) {
+          day = '0' + day;
+        }
+        return [year, month, day].join('-');
+    }
+
+    function handleView(event) {
+        navigate("/viewResult", { state: event.target.innerText });
+    }
+
+    function handleDelete() {
+
+    }
 
     return (
         <>
-            <Calendar className="m-auto mt-1.5 mb-3" onClickDay={handleDay} />
-            <div className='sm:flex justify-center'>
+            <ul className='m-2 divide-y divide-blue-200'>
                 {
-                    matches && matches.map((match, index) => <Result 
-                        key={index}
-                        courtNum={match.courtNum}
-                        playerA1={match.playerA1}
-                        playerA2={match.playerA2}
-                        playerB1={match.playerB1}
-                        playerB2={match.playerB2}
-                        scoreA={match.scoreA}
-                        scoreB={match.scoreB} />)
+                    matches && matches.map((match, index) => {
+                        return <div className='sm:flex m-1' key={index}>
+                                <li className={listClassName} value={toString(match.date)} onClick={handleView}>{match.date}</li>
+                                {/* <span className={spanClassName} id={match.id} onClick={handleView}>View</span> */}
+                                {/* <span className={spanClassName} id={match.id} onClick={handleDelete}>Delete</span> */}
+                                </div>
+                    })
                     // resultComp
                 }
-            </div>
+            </ul>
         </>
     );
 };

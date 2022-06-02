@@ -21,7 +21,7 @@ export const Member = (props) => {
             <span className={spanClassName}>{props.name}</span>
             <span className={spanClassName}>{props.level}</span>
             {/* <button id={props.id} className={buttonClassName} onClick={handleEdit}>Edit</button> */}
-            {/* <button id={props.id} className={buttonClassName} onClick={handleDelete}>Delete</button> */}
+            <button id={props.id} className={buttonClassName} onClick={handleDelete}>Delete</button>
         </li>
     );
 };

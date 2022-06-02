@@ -13,8 +13,11 @@ export const Create = () => {
     const [selectedDate, setSelectedDate] = useState();
     const [upcomingMsg, setUpcomingMessage] = useState("");
     const [upcomingDate, setUpcomingDate] = useState("");
+    const [calendarValue, setCalendar] = useState();
+    const [eventId, setEventId] = useState();
     const navigate = useNavigate();
     const url = `https://git.heroku.com/acetennis.git/event?month=&year=&date=`;
+    const [btnText, setBtnText] = useState();
 
     useEffect(() => {
         const isLogin = sessionStorage.getItem('isLogin');
@@ -43,19 +46,23 @@ export const Create = () => {
                 // set new upcoming event
                 setUpcomingMessage("");
                 setUpcomingDate("");
+                setEventId(-1);
+                setBtnText("Create");
+                setCalendar(new Date());
             } else {
                 setUpcomingDate(fullDate);
+                setCalendar(new Date(fullDate));
+                setEventId(res.id);
                 setUpcomingMessage(`Upcoming event is on ${fullDate}`);
                 localStorage.setItem('UpcomingMatch', `${fullDate}`);
-                // btnClassName = btnClassName + 'invisible';
-                // console.log(`classname ${btnClassName}`)
+                setBtnText("Delete");
             }
         })
         .catch(error => {
             console.log(error);
             console.log("Get events request failed");
         });
-    }, []);
+    }, [upcomingMsg]);
 
     // Make 2 digit of number to compare selectedDate
     function adjustDate(event) {
@@ -80,13 +87,27 @@ export const Create = () => {
         setSelectedDate(newDate);
     }
 
-    function handleCreate(){
-        if(upcomingDate !== "") {
-            setMessage("Upcoming event is already created");
-            return;
-        }
-        setMessage('Loading...');
+    function deleteEvent() {
+        const token = localStorage.getItem('TOKEN');
+        fetch(`https://git.heroku.com/acetennis.git/event/${eventId}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then(response => {
+            setMessage("Upcoming event deleted");
+            setUpcomingDate("");
+            setCalendar(new Date());
+            setEventId(-1);
+            setBtnText("Create");
+        })
+        .catch(error => {
+            console.error("admin crete error: " + error);
+        })
+    }
 
+    function createEvent() {
         fetch(`https://git.heroku.com/acetennis.git/event`, {
             method: "POST",
             headers: {
@@ -97,6 +118,8 @@ export const Create = () => {
         .then(response => {
             setMessage("Upcoming event created");
             setUpcomingDate(selectedDate);
+            setCalendar(new Date(selectedDate));
+            setBtnText("Delete");
             setUpcomingMessage(`Upcoming event is on ${selectedDate}`);
             // navigate("/manage_game", { state: data }); 
         })
@@ -105,12 +128,22 @@ export const Create = () => {
         })
     }
 
+    function handleCreate(){
+        if(upcomingDate !== "") {
+            // Delete
+            deleteEvent();
+        } else {
+            setMessage('Loading...');
+            createEvent();
+        }
+    }
+
     return (
         <div className='sm:flex flex-col items-center'>
             <h1 className='m-5 text-4xl text-color-mint text-center'>Create upcoming event</h1>
             <h2 className='m-5 text-xl text-slate-500 text-center'>{upcomingMsg}</h2>
-            <Calendar className="m-auto mt-1.5" onClickDay={handleDay} />
-            <button className={btnClassName} onClick={handleCreate}>Create</button>
+            <Calendar className="m-auto mt-1.5" value={calendarValue} onClickDay={handleDay} />
+            <button className={btnClassName} onClick={handleCreate}>{btnText}</button>
             <span className='block m-2 text-center text-2xl text-red-500'>{resMessage}</span>
         </div>
     );

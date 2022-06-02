@@ -30,10 +30,11 @@ export const ManageGame = () => {
         setError('Loading...');
         setLevel(level);
 
-        fetch(`hhttps://git.heroku.com/acetennis.git/players/${data.date}`, {
+        const token = localStorage.getItem('TOKEN');
+        fetch(`https://git.heroku.com/acetennis.git/players/${data.date}`, {
             method: "GET",
             headers: {
-                'Content-Type': "application/json"
+                Authorization: `Bearer ${token}`,
             },
         })
         .then(response => response.json())
@@ -87,10 +88,11 @@ export const ManageGame = () => {
         selectedPlayers.forEach((item, index) => {
             // console.log(JSON.stringify(data));
             setError('Loading...');
+            const token = localStorage.getItem('TOKEN');
             fetch(`https://git.heroku.com/acetennis.git/matches`, {
                 method: "POST",
                 headers: {
-                    'Content-Type': "application/json"
+                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({...item, courtNum:index+1, date:data.date})
                 })

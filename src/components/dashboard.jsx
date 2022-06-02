@@ -13,21 +13,14 @@ export const Dashboard = () => {
             navigate("/", { replace: true });
             return;
         }
-    }, []);
 
-    function handleClick(name) {
-        const navName = `/${name.toLowerCase()}`;
-        const isLogin = sessionStorage.getItem('isLogin');
-        const username = sessionStorage.getItem('username');
-        isLogin && (username==="admin") 
-            ? navigate(navName, { replace: true }) : navigate('/', { replace: true })
-    }
+        const token = localStorage.getItem('TOKEN');
 
     fetch("https://git.heroku.com/acetennis.git/auth/count", {
             method: "GET",
             headers: {
-                'content-type': "application/json"
-            },
+                Authorization: `Bearer ${token}`,
+            }
         })
         .then(response => response.json())
         .then(response => {
@@ -36,6 +29,23 @@ export const Dashboard = () => {
         .catch(error => {
             console.log(error);
         })
+    }, []);
+
+    function getHeaders() {
+        const token = localStorage.getItem('TOKEN');
+        console.log(token)
+        return {
+            Authorization: `Bearer ${token}`,
+        };
+    }
+
+    function handleClick(name) {
+        const navName = `/${name.toLowerCase()}`;
+        const isLogin = sessionStorage.getItem('isLogin');
+        const username = sessionStorage.getItem('username');
+        isLogin && (username==="admin") 
+            ? navigate(navName, { replace: true }) : navigate('/', { replace: true })
+    }
 
     return (
         <>

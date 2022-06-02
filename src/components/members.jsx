@@ -18,10 +18,11 @@ export const Members = () => {
         }
 
         setStatus('Loading...');
+        const token = localStorage.getItem('TOKEN');
         fetch(`https://git.heroku.com/acetennis.git/members?level=${optionRef.current.value}`, {
             method: "GET",
             headers: {
-                'Content-Type': "application/json"
+                Authorization: `Bearer ${token}`,
             },
         })
         .then(response => response.json())
@@ -52,10 +53,11 @@ export const Members = () => {
 
     function handleDelete(id) {
         setStatus('Loading...');
-        fetch(`http://localhost:${config.host.port}/members/${id}`, {
+        const token = localStorage.getItem('TOKEN');
+        fetch(`https://git.heroku.com/acetennis.git/members/${id}`, {
             method: "DELETE",
             headers: {
-                'content-Type': "application/json" 
+                Authorization: `Bearer ${token}`, 
             },
         })
         .then(res => {

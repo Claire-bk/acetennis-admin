@@ -10,6 +10,7 @@ import { Create } from './components/create';
 import { ViewMember } from './components/viewMember';
 import { ViewResult } from './components/viewResult';
 import { ManageGame } from './components/manageGame';
+import { Matchtable } from './components/matchtable';
 
 export function App() {
   return (
@@ -24,9 +25,10 @@ export function App() {
             <Route path="/results" element={<Results />} />
             <Route path="/manage" element={<Manage />} />
             <Route path="/create" element={<Create />} />
-            {/* <Route path="/view_member" element={<ViewMember />} /> */}
-            {/* <Route path="/view_result" element={<ViewResult />} /> */}
+            <Route path="/view_member" element={<ViewMember />} />
+            <Route path="/viewResult" element={<ViewResult />} />
             <Route path="/manage_game" element={<ManageGame />} />
+            <Route path="/matchtable" element={<Matchtable />} />
         </Routes>
       </BrowserRouter>
     </div>

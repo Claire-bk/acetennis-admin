@@ -40,7 +40,7 @@ export const Manage = () => {
             const date = eventDate.getDate();
             const fullDate = `${year}-${month}-${date}`;
 
-            if(today - fullDate > 0) {
+            if(today - eventDate > 0) {
                 // match game is not created.
                 navigate("/create", { replace: true });
                 return;
@@ -49,10 +49,11 @@ export const Manage = () => {
             setUpcomingDate(fullDate);
             const updateData = {...data, date:fullDate};
             setData(updateData);
-            fetch(`http://localhost:8081/players/${fullDate}`, {
+            const token = localStorage.getItem('TOKEN');
+            fetch(`https://git.heroku.com/acetennis.git/players/${fullDate}`, {
                 method: "GET",
                 headers: {
-                    'Content-Type': "application/json"
+                    Authorization: `Bearer ${token}`,
                 },
             })
             .then(response => response.json())
@@ -108,13 +109,18 @@ export const Manage = () => {
     }
 
     function handleClick(){
+        if(players.length == 0) {
+            setMessage('No player joined');
+            return;
+        }
+
         if(!inputRef.current.value) {
             setMessage('Enter court number');
             return;
         }
 
-            setMessage("");
-            navigate("/manage_game", { state: data }); 
+        setMessage("");
+        navigate("/manage_game", { state: data }); 
     }
 
     return (
@@ -154,7 +160,7 @@ export const Manage = () => {
                 </div>
                 <button className='ml-4 p-2 border-none rounded-md bg-color-dark-pink text-white' onClick={handleClick}>Create</button>
             </div>
-            <span className='block text-center text-2xl text-red-500'>{resMessage}</span>
+            <span className='block text-center mt-2 text-2xl text-red-500'>{resMessage}</span>
         </>
     );
 };
