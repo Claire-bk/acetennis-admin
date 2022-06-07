@@ -32,7 +32,6 @@ export function App() {
             <Route path="/manage" element={<Manage />} />
             <Route path="/manage_view" element={<ManageView />} />
             <Route path="/create" element={<Create />} />
-            <Route path="/member_view" element={<MemberView />} />
             <Route path="/member_delete" element={<MemberDelete/>} />
             <Route path="/member_edit" element={<MemberEdit/>} />
             <Route path="/result_view" element={<ResultView />} />
