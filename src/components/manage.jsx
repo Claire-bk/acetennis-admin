@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { config } from '../../config';
+
+
+const listClassName = 'p-3 text-slate-500 border m-2 p-2';
+const ulClassName = 'mt-2';
 
 export const Manage = () => {
     const today = new Date();
@@ -10,13 +13,11 @@ export const Manage = () => {
     const [playersM, setPlayersMiddle] = useState([]);
     const [playersL, setPlayersLow] = useState([]);
     const [upcomingDate, setUpcomingDate] = useState("");
-    const [data, setData] = useState({});
+    const [upcomingId, setUpcomingId] = useState();
     const [resMessage, setMessage] = useState("");
-    const inputRef = React.createRef();
     const navigate = useNavigate();
-    const url = `https://git.heroku.com/acetennis.git/event?month=&year=&date=`;
+    const url = `https://acetennis.herokuapp.com/event?month=&year=&date=`;
     let infoClassName = 'p-4';
-    const listClassName = 'p-3 text-slate-500 border m-2 p-2';
 
     useEffect(() => {
         const isLogin = sessionStorage.getItem('isLogin');
@@ -25,32 +26,48 @@ export const Manage = () => {
             return;
         }
 
+        setMessage("Loading...");
+
         // fetch event date
         fetch(url, {
             method: "GET",
             headers: {
-                'content-Type': "application/json"
+                'Content-Type': "application/json"
             },
         })
         .then(res => res.json())
         .then(res => {
             const eventDate = new Date(res.date);
-            const year = eventDate.getFullYear();
-            const month = eventDate.getMonth() + 1;
-            const date = eventDate.getDate();
-            const fullDate = `${year}-${month}-${date}`;
+            const fullDate = getFormatDate(eventDate);
 
             if(today - eventDate > 0) {
                 // match game is not created.
                 navigate("/create", { replace: true });
                 return;
             }
+
+            fetch(`https://acetennis.herokuapp.com/matches?date=${fullDate}`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': "application/json"
+                },
+            })
+            .then(response => response.json())
+            .then(response => {
+                if(response.length > 0) {
+                    navigate("/manage_view", { replace: true });
+                    return;
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
             // fetch player list
             setUpcomingDate(fullDate);
-            const updateData = {...data, date:fullDate};
-            setData(updateData);
+            setUpcomingId(res.id);
+            
             const token = localStorage.getItem('TOKEN');
-            fetch(`https://git.heroku.com/acetennis.git/players/${fullDate}`, {
+            fetch(`https://acetennis.herokuapp.com/players/${fullDate}`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -76,36 +93,32 @@ export const Manage = () => {
                 const playerL = playerList.filter(player => player.level == 'L');
                 setPlayersLow(playerL);
                 
-                playerH.forEach(player => console.log(player.name))
+                // playerH.forEach(player => console.log(player.name))
                 setPlayers(playerList);
-                // setError("");
+                setMessage("");
             })
             .catch(error => {
                 console.log("Client error: " + error);
-            })
-                
-            })
-            .catch(error => {
-                console.log(error);
-                console.log("Get events request failed");
-            });
+            })       
+        })
+        .catch(error => {
+            console.log(error);
+            console.log("Get events request failed");
+        });
 
     }, [infoClassName]);
 
-    function handleDay(event) {
-        const year = event.getFullYear();
-        const month = event.getMonth() + 1;
-        const date = event.getDate();
-        const newDate = `${year}-${month}-${date}`;
-        const newData = {...data, date: newDate};
-        setData(newData);
-        setMessage("");
-    }
-
-    function handleEnter() {
-        setMessage("");
-        const newData = {...data, courtNum: inputRef.current.value};
-        setData(newData);
+    function getFormatDate (date) {
+        let month = (date.getMonth() + 1).toString();
+        let day = date.getDate().toString();
+        let year = date.getFullYear();
+        if (month.length < 2) {
+          month = '0' + month;
+        }
+        if (day.length < 2) {
+          day = '0' + day;
+        }
+        return [year, month, day].join('-');
     }
 
     function handleClick(){
@@ -114,13 +127,8 @@ export const Manage = () => {
             return;
         }
 
-        if(!inputRef.current.value) {
-            setMessage('Enter court number');
-            return;
-        }
-
         setMessage("");
-        navigate("/manage_game", { state: data }); 
+        navigate("/manage_game", { state: {list:players, date:upcomingDate, id:upcomingId }}); 
     }
 
     return (
@@ -129,10 +137,10 @@ export const Manage = () => {
                 <h1 className='text-4xl text-color-mint mb-2'>Upcoming Match Game</h1>
                 <span className='mt-2 p-4 text-xl text-slate-500'>{upcomingDate}</span>
                 <div className={infoClassName}>
-                    <div className='sm:flex flex-row justify-center'>
+                    <div className='flex flex-row justify-center'>
                         <div className={listClassName}>
                             <span className='text-center text-sky-900 bg-sky-100 p-2'>Level : High</span>
-                            <ul>
+                            <ul className={ulClassName}>
                                 {
                                     playersH.map((player, index) => <li key={index}>{player.name}</li>)
                                 }
@@ -140,7 +148,7 @@ export const Manage = () => {
                         </div>
                         <div className={listClassName}>
                             <span className='text-center text-sky-900 bg-sky-100 p-2'>Level : Middle</span>
-                            <ul>
+                            <ul className={ulClassName}>
                                 {
                                     playersM.map((player, index) => <li key={index}>{player.name}</li>)
                                 }
@@ -148,15 +156,13 @@ export const Manage = () => {
                         </div>
                         <div className={listClassName}>
                             <span className='text-center text-sky-900 bg-sky-100 p-2'>Level : Low</span>
-                            <ul>
+                            <ul className={ulClassName}>
                                 {
                                     playersL.map((player, index) => <li key={index}>{player.name}</li>)
                                 }
                             </ul>
                         </div>
                     </div>
-                    <label className='mt-2 p-4 text-xl text-slate-500' htmlFor="">How many courts?  </label>
-                    <input className='border p-2 w-12' type="number" ref={inputRef} onClick={handleEnter} min="1" max="9" />
                 </div>
                 <button className='ml-4 p-2 border-none rounded-md bg-color-dark-pink text-white' onClick={handleClick}>Create</button>
             </div>

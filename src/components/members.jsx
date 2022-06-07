@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import Member from './member';
-import { config } from '../../config';
+
 
 export const Members = () => {
     const [members, setMember] = useState([]);
@@ -19,7 +19,7 @@ export const Members = () => {
 
         setStatus('Loading...');
         const token = localStorage.getItem('TOKEN');
-        fetch(`https://git.heroku.com/acetennis.git/members?level=${optionRef.current.value}`, {
+        fetch(`https://acetennis.herokuapp.com/members?level=${optionRef.current.value}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -27,8 +27,9 @@ export const Members = () => {
         })
         .then(response => response.json())
         .then(response => {
-            setMember(response);
-            setFilter(response);
+            let members = response.filter(member => member.role !== 'admin')
+            setMember(members);
+            setFilter(members);
             setStatus("");
         })
         .catch(error => {
@@ -48,28 +49,15 @@ export const Members = () => {
     }
 
     function handleEdit(id) {
-        console.log(`id ${id}`)
+        // console.log(`id ${id}`)
+        const selectedMember = members.filter(member => member.id === id);
+        navigate("/member_edit", { state:selectedMember });
     }
 
     function handleDelete(id) {
-        setStatus('Loading...');
-        const token = localStorage.getItem('TOKEN');
-        fetch(`https://git.heroku.com/acetennis.git/members/${id}`, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`, 
-            },
-        })
-        .then(res => {
-            const members = members.filter(member => member.id !== id);
-            const filterMembers = members.filter(member => member.level == level);
-            setStatus("");
-        })
-        .catch(error => {
-            console.log(error);
-            console.log("Fail to delete member");
-        });
-        }
+        const selectedMember = members.filter(member => member.id === id);
+        navigate("/member_delete", { state:selectedMember });
+    }
 
     return (
         <div>

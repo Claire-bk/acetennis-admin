@@ -1,24 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Game } from './game';
-import { config } from '../../config';
-import { CLIENT_IGNORE_SPACE } from 'mysql/lib/protocol/constants/client';
+
 
 export const ManageGame = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const data = location.state;
-    const courtArr = [];
+    const playerInfo = location.state;
+    const [courtInfo, setCourtInfo] = useState([{courtNum:1, level:'A'}]);
     const [errorStatus, setError] = useState("");
-    const [courtLevel, setLevel] = useState([]);
-    const [players, setPlayers] = useState([]);
-    const [selectedPlayers, setSeletedPlayers] = useState([]);
-
-    const level = [];
-    for(i=0; i< data.courtNum; i++) {
-        courtArr[i] = i + 1;
-        level[i] ='A'
-    }
+    const [players, setPlayers] = useState(playerInfo.list);
+    const [upcomingDate, setUpcomingDate] = useState(playerInfo.date);
+    const [selectedPlayers, setSeletedPlayers] = useState([{playerA1: '', playerA2: '', playerB1: '', playerB2: ''}]);
 
     useEffect(() => {
         const isLogin = sessionStorage.getItem('isLogin');
@@ -26,36 +19,13 @@ export const ManageGame = () => {
             navigate("/", { replace: true });
             return;
         }
-        
-        setError('Loading...');
-        setLevel(level);
-
-        const token = localStorage.getItem('TOKEN');
-        fetch(`https://git.heroku.com/acetennis.git/players/${data.date}`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-        .then(response => response.json())
-        .then(response => {
-            const playerList = [...response];
-
-            playerList &&  playerList.forEach(player=>player.status="")
-            
-            setPlayers(playerList);
-            setError("");
-        })
-        .catch(error => {
-            setError("");
-            console.log("Client error: " + error);
-        })
     }, []);
 
     function handleLevel(court, level) {
-        const newLevel = [...courtLevel];
-        newLevel[court-1] = level;
-        setLevel(newLevel);
+        const index = court -1;
+        const newCourt = {...courtInfo};
+        newCourt[index].level = level;
+        setCourtInfo(newCourt);
     }
 
     function handlePlayer(preId, currId, court, selectedList) {  
@@ -84,17 +54,16 @@ export const ManageGame = () => {
     }
 
     function postMatchInfo() {
-        // const data = selectedPlayers.map((team, index) => [{...team, courtNum:index+1}]);
         selectedPlayers.forEach((item, index) => {
-            // console.log(JSON.stringify(data));
             setError('Loading...');
             const token = localStorage.getItem('TOKEN');
-            fetch(`https://git.heroku.com/acetennis.git/matches`, {
+            fetch(`https://acetennis.herokuapp.com/matches`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,
+                    'Content-Type': "application/json"
                 },
-                body: JSON.stringify({...item, courtNum:index+1, date:data.date})
+                body: JSON.stringify({...item, courtNum:index+1, date:upcomingDate})
                 })
                 .then(response => response.json())
                 .then(response => {
@@ -119,12 +88,68 @@ export const ManageGame = () => {
         }
     }
 
+    function handleAddCourt() {
+        let len = courtInfo.length;
+
+        if(len >= 10) {
+            return;
+        }
+
+        len = len + 1;
+
+        let newCourt = [...courtInfo, {courtNum:len, level:'A'}];
+        setCourtInfo(newCourt);
+
+        const players = [...selectedPlayers, {playerA1: '', playerA2: '', playerB1: '', playerB2: ''}];
+        setSeletedPlayers(players);
+    }
+
+    function handleDeleteCourt() {
+        const len = courtInfo.length;
+        console.log(selectedPlayers)
+
+        if(len <= 1) {
+            return;
+        }
+
+        const newPlayers = [...players];
+        const courtIndex = len - 1;
+        // delete seleted player by last court number
+        selectedPlayers.length > 0 && newPlayers.forEach(player => {
+            if(player.id == selectedPlayers[courtIndex].playerA1) {
+                player.status = "";
+            } else if(player.id == selectedPlayers[courtIndex].playerA2) {
+                player.status = "";
+            } else if(player.id == selectedPlayers[courtIndex].playerB1) {
+                player.status = "";
+            } else if(player.id == selectedPlayers[courtIndex].playerB2) {
+                player.status = "";
+            }
+        })
+
+        setPlayers(newPlayers);
+        // console.log(selectedPlayers)
+        let newCourt = [...courtInfo];
+        newCourt.pop();
+        setCourtInfo(newCourt);
+
+        let newPlayer = [...selectedPlayers];
+        // console.log(newPlayer);
+        newPlayer.pop();
+        // console.log(newPlayer);
+        setSeletedPlayers(newPlayer);
+    }
+
     return (
-        <div className='sm:flex flex-col justify-center mt-2'>
-            <button className='ml-4 p-2 border-none rounded-md bg-color-dark-pink text-white text-center' onClick={handleSave}>Save</button>
-            <div className='sm:flex justify-center'>
+        <div className='flex flex-col justify-center mt-2'>
+            <div className='text-center'>
+                <button className='ml-4 p-2 border-none rounded-md bg-color-dark-pink text-white text-center' onClick={handleAddCourt}>Add Court</button>
+                <button className='ml-4 p-2 border-none rounded-md bg-color-dark-pink text-white text-center' onClick={handleDeleteCourt}>Delete Court</button>
+                <button className='ml-4 p-2 border-none rounded-md bg-color-dark-pink text-white text-center' onClick={handleSave}>Save</button>
+            </div>
+            <div className='flex justify-center  flex-wrap '>
                 {
-                        courtArr && courtArr.map((num, index) => <Game key={index} court={num} level={courtLevel[index]}  players={players} 
+                        courtInfo && courtInfo.map((item, index) => <Game key={index} court={item.courtNum} level={item.level}  players={players} 
                         onLevelChange={handleLevel}
                         onPlayerSelected={handlePlayer} />)
                 }

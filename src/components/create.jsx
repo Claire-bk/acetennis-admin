@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-// import { Calendar } from './calendar';
-import { config } from '../../config';
 
 export const Create = () => {
     let btnClassName = 'm-4 ml-4 p-2 border-none rounded-md bg-color-dark-pink text-white w-40  ';
@@ -16,7 +13,7 @@ export const Create = () => {
     const [calendarValue, setCalendar] = useState();
     const [eventId, setEventId] = useState();
     const navigate = useNavigate();
-    const url = `https://git.heroku.com/acetennis.git/event?month=&year=&date=`;
+    const url = `https://acetennis.herokuapp.com/event?month=&year=&date=`;
     const [btnText, setBtnText] = useState();
 
     useEffect(() => {
@@ -29,7 +26,7 @@ export const Create = () => {
         fetch(url, {
             method: "GET",
             headers: {
-                'content-Type': "application/json"
+                'Content-Type': "application/json"
             },
         })
         .then(res => res.json())
@@ -89,7 +86,7 @@ export const Create = () => {
 
     function deleteEvent() {
         const token = localStorage.getItem('TOKEN');
-        fetch(`https://git.heroku.com/acetennis.git/event/${eventId}`, {
+        fetch(`https://acetennis.herokuapp.com/event/${eventId}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -108,10 +105,12 @@ export const Create = () => {
     }
 
     function createEvent() {
-        fetch(`https://git.heroku.com/acetennis.git/event`, {
+	const token = localStorage.getItem('TOKEN');
+        fetch(`https://acetennis.herokuapp.com/event`, {
             method: "POST",
             headers: {
-                'Content-Type': "application/json"
+                Authorization: `Bearer ${token}`,
+                'Content-Type': "application/json",
             },
             body: JSON.stringify({"date":selectedDate})
         })
@@ -121,7 +120,6 @@ export const Create = () => {
             setCalendar(new Date(selectedDate));
             setBtnText("Delete");
             setUpcomingMessage(`Upcoming event is on ${selectedDate}`);
-            // navigate("/manage_game", { state: data }); 
         })
         .catch(error => {
             console.error("Client error: " + error);
@@ -139,7 +137,7 @@ export const Create = () => {
     }
 
     return (
-        <div className='sm:flex flex-col items-center'>
+        <div className='flex flex-col items-center'>
             <h1 className='m-5 text-4xl text-color-mint text-center'>Create upcoming event</h1>
             <h2 className='m-5 text-xl text-slate-500 text-center'>{upcomingMsg}</h2>
             <Calendar className="m-auto mt-1.5" value={calendarValue} onClickDay={handleDay} />

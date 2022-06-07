@@ -6,11 +6,17 @@ import { LoginForm } from './components/loginForm';
 import { Members } from './components/members';
 import { Results } from './components/results';
 import { Manage } from './components/manage';
+import { ManageView } from './components/manageView';
 import { Create } from './components/create';
-import { ViewMember } from './components/viewMember';
-import { ViewResult } from './components/viewResult';
+import { MemberDelete } from './components/memberDelete';
+import { MemberEdit } from './components/memberEdit';
+import { ResultView } from './components/resultView';
+import { ResultDelete } from './components/resultDelete';
+import { ResultEdit } from './components/resultEdit';
 import { ManageGame } from './components/manageGame';
 import { Matchtable } from './components/matchtable';
+
+const baseURL = 'https://acetennis.herokuapp.com';
 
 export function App() {
   return (
@@ -24,9 +30,14 @@ export function App() {
             <Route path="/members" element={<Members />} />
             <Route path="/results" element={<Results />} />
             <Route path="/manage" element={<Manage />} />
+            <Route path="/manage_view" element={<ManageView />} />
             <Route path="/create" element={<Create />} />
-            <Route path="/view_member" element={<ViewMember />} />
-            <Route path="/viewResult" element={<ViewResult />} />
+            <Route path="/member_view" element={<MemberView />} />
+            <Route path="/member_delete" element={<MemberDelete/>} />
+            <Route path="/member_edit" element={<MemberEdit/>} />
+            <Route path="/result_view" element={<ResultView />} />
+            <Route path="/result_delete" element={<ResultDelete />} />
+            <Route path="/result_edit" element={<ResultEdit />} />
             <Route path="/manage_game" element={<ManageGame />} />
             <Route path="/matchtable" element={<Matchtable />} />
         </Routes>

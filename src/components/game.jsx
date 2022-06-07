@@ -1,4 +1,3 @@
-import { CLIENT_IGNORE_SPACE } from 'mysql/lib/protocol/constants/client';
 import React, { useState, useEffect } from 'react';
 
 export const Game = (props) => {
@@ -76,71 +75,71 @@ export const Game = (props) => {
                     <option value="L">Low</option>
                 </select>
             </div>
-                <select className='p-2' ref={playerA1Ref} onChange={handlePlayerA1}>
-                    <option className={optionClassName} value="">Team A: Player1</option>
-                    {
+            <select className='p-2' ref={playerA1Ref} onChange={handlePlayerA1}>
+                <option className={optionClassName} value="">Team A: Player1</option>
+                {
+                    players && 
+                    players.map((player, index) => {
+                        // check level
+                        if(props.level === 'A' || props.level === player.level) {
+                            if(player.status != 'selected'){
+                                return <option className={optionClassName} key={index} value={player.id}>{player.name}</option>
+                            } else if(selectedPlayer.playerA1 == player.id) {
+                                return <option className={optionClassName} key={index} value={player.id} selected>{player.name}</option>
+                            }
+                        }
+                    })
+                }
+            </select>
+            <select className='p-2' ref={playerA2Ref} onChange={handlePlayerA2}>
+                <option className='p-2 text-sky-700' value="">Team A: Player2</option>
+                {
                         players && 
                         players.map((player, index) => {
                             // check level
                             if(props.level === 'A' || props.level === player.level) {
                                 if(player.status != 'selected'){
-                                    return <option className={optionClassName} key={index} value={player.id}>{player.name}</option>
-                                } else if(selectedPlayer.playerA1 == player.id) {
-                                    return <option className={optionClassName} key={index} value={player.id} selected>{player.name}</option>
+                                    return <option className='p-2 text-sky-700' key={index} value={player.id}>{player.name}</option>
+                                } else if(selectedPlayer.playerA2 == player.id) {
+                                    return <option className='p-2 text-sky-700' key={index} value={player.id} selected>{player.name}</option>
                                 }
                             }
                         })
-                    }
-                </select>
-                <select className='p-2' ref={playerA2Ref} onChange={handlePlayerA2}>
-                    <option className='p-2 text-sky-700' value="">Team A: Player2</option>
-                    {
-                            players && 
-                            players.map((player, index) => {
-                                // check level
-                                if(props.level === 'A' || props.level === player.level) {
-                                    if(player.status != 'selected'){
-                                        return <option className='p-2 text-sky-700' key={index} value={player.id}>{player.name}</option>
-                                    } else if(selectedPlayer.playerA2 == player.id) {
-                                        return <option className='p-2 text-sky-700' key={index} value={player.id} selected>{player.name}</option>
-                                    }
-                                }
-                            })
-                    }
-                </select>
-                <select className='p-2' ref={playerB1Ref} onChange={handlePlayerB1}>
-                    <option className={optionClassName} value="">Team B: Player1</option>
-                    {
-                        players && 
-                        players.map((player, index) => {
-                            // check level
-                            if(props.level === 'A' || props.level === player.level) {
-                                if(player.status != 'selected'){
-                                    return <option className={optionClassName} key={index} value={player.id}>{player.name}</option>
-                                } else if(selectedPlayer.playerB1 == player.id) {
-                                    return <option className={optionClassName} key={index} value={player.id} selected>{player.name}</option>
-                                }
+                }
+            </select>
+            <select className='p-2' ref={playerB1Ref} onChange={handlePlayerB1}>
+                <option className={optionClassName} value="">Team B: Player1</option>
+                {
+                    players && 
+                    players.map((player, index) => {
+                        // check level
+                        if(props.level === 'A' || props.level === player.level) {
+                            if(player.status != 'selected'){
+                                return <option className={optionClassName} key={index} value={player.id}>{player.name}</option>
+                            } else if(selectedPlayer.playerB1 == player.id) {
+                                return <option className={optionClassName} key={index} value={player.id} selected>{player.name}</option>
                             }
-                        })
-                    }
-                </select>
-                <select className='p-2' ref={playerB2Ref} onChange={handlePlayerB2}>
-                    <option className={optionClassName} value="">Team B: Player2</option>
-                    {
-                        players && 
-                        players.map((player, index) => {
-                            // check level
-                            if(props.level === 'A' || props.level === player.level) {
-                                if(player.status != 'selected'){
-                                    return <option className={optionClassName} key={index} value={player.id}>{player.name}</option>
-                                } else if(selectedPlayer.playerB2 == player.id) {
-                                    return <option className={optionClassName} key={index} value={player.id} selected>{player.name}</option>
-                                }
+                        }
+                    })
+                }
+            </select>
+            <select className='p-2' ref={playerB2Ref} onChange={handlePlayerB2}>
+                <option className={optionClassName} value="">Team B: Player2</option>
+                {
+                    players && 
+                    players.map((player, index) => {
+                        // check level
+                        if(props.level === 'A' || props.level === player.level) {
+                            if(player.status != 'selected'){
+                                return <option className={optionClassName} key={index} value={player.id}>{player.name}</option>
+                            } else if(selectedPlayer.playerB2 == player.id) {
+                                return <option className={optionClassName} key={index} value={player.id} selected>{player.name}</option>
                             }
-                        })
-                    }
-                </select>
-            </div>
+                        }
+                    })
+                }
+            </select>
+        </div>
     );
 };
 
