@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
-
 const listClassName = 'p-3 text-slate-500 border m-2 p-2';
 const ulClassName = 'mt-2';
 

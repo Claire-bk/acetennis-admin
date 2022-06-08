@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
-
 const spanClassName = 'p-2 text-color-dark-pink hover:text-violet-700 hover:cursor-pointer';
 const listClassName = 'p-2  text-slate-500 hover:cursor-pointer';
 

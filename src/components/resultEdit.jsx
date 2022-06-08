@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 
-
 const formClassName = "container border border-color-light-grey mx-auto p-4 pt-8 grid md:grid-cols-3 gap-4";
 const inputClassName = "border border-color-grey text-color-grey rounded-md p-1 mr-8 col-span-2";
 const labelClassName = "text-color-grey text-right pr-4";

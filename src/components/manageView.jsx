@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-
 const divClassName = 'ml-2 mr-2 p-2 text-slate-500';
 const spanClassName = 'p-2';
 

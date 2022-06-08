@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Game } from './game';
 
-
 export const ManageGame = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -42,6 +41,7 @@ export const ManageGame = () => {
         })
 
         setPlayers(newPlayers);
+        setError("");
 
         // num start from 1 -
         const index = court - 1;
@@ -84,7 +84,7 @@ export const ManageGame = () => {
             postMatchInfo();
             setError("");
         } else {
-            setError('Player1 should be selected!');
+            setError('Player should be selected!');
         }
     }
 

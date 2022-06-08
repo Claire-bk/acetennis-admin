@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from './card';
 
-
 export const Dashboard = () => {
     const [status, setStatus] = useState("");
     const [isView, setView] = useState(false);

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-
 const labelClassName = 'text-xl mr-2 p-2 w-32 text-center inline-block text-slate-500';
 const spanClassName = 'text-xl p-2 inline-block text-slate-500';
 const btnClassName = 'm-4 ml-4 p-2 border-none rounded-md bg-color-dark-pink text-white w-40';
