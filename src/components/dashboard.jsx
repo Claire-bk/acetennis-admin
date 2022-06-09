@@ -27,12 +27,15 @@ export const Dashboard = () => {
         .then(response => response.json())
         .then(response => {
             setStatus(response.count);
+            getMatchInfo();
         })
         .catch(error => {
             console.log(error);
         });
+    }, []);
 
-        fetch(`https://acetennis.herokuapp.com/event?month=&year=&date=`, {
+    function getMatchInfo() {
+        fetch(`http://localhost:8081/event?month=&year=&date=`, {
             method: "GET",
             headers: {
                 'Content-Type': "application/json"
@@ -68,7 +71,7 @@ export const Dashboard = () => {
         .catch(error => {
             console.log(error);
         })
-    }, []);
+    }
 
     function getFormatDate (date) {
         let month = (date.getMonth() + 1).toString();
