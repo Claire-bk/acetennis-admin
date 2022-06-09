@@ -38,8 +38,8 @@ export const ResultEdit = () => {
             navigate('/results', { replace: true });
         })
         .catch(error => {
-            console.log(error);
-            console.log("Fail to delete member");
+            // console.log(error);
+            // console.log("Fail to delete member");
         });
     };
 

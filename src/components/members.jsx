@@ -33,7 +33,7 @@ export const Members = () => {
             setStatus("");
         })
         .catch(error => {
-            console.log("Client error: " + error);
+            // console.log("Client error: " + error);
         })
     }, []);
 

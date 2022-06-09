@@ -42,7 +42,7 @@ export const MemberEdit = () => {
         })
         .catch(error => {
             setStatus(error);
-            console.log("Fail to update member info");
+            // console.log("Fail to update member info");
         });
     };
     

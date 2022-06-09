@@ -30,8 +30,8 @@ const btnClassName = 'm-4 ml-4 p-2 border-none rounded-md bg-color-dark-pink tex
             navigation('/members', { replace: true })
         })
         .catch(error => {
-            console.log(error);
-            console.log("Fail to delete member");
+            // console.log(error);
+            // console.log("Fail to delete member");
         });
     }
 

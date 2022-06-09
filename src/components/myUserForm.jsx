@@ -40,7 +40,7 @@ export const MyUserForm = () => {
             setStatus("Client error: " + error);
         })
 
-        console.log(formData);
+        // console.log(formData);
     };
 
     return <form className={formClassName} onSubmit={handleSubmit(onSubmit)}>

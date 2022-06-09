@@ -34,7 +34,7 @@ export const ResultDelete = () => {
             navigate('/results', { replace: true })
         })
         .catch(error => {
-            console.log(error);
+            // console.log(error);
         })
     }
 

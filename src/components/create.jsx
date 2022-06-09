@@ -63,8 +63,8 @@ export const Create = () => {
             }
         })
         .catch(error => {
-            console.log(error);
-            console.log("Get events request failed");
+            // console.log(error);
+            // console.log("Get events request failed");
         });
     }, [upcomingMsg]);
 

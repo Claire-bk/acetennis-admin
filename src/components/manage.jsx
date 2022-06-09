@@ -59,7 +59,7 @@ export const Manage = () => {
                 }
             })
             .catch(error => {
-                console.log(error)
+                // console.log(error);
             })
             // fetch player list
             setUpcomingDate(fullDate);
@@ -97,12 +97,12 @@ export const Manage = () => {
                 setMessage("");
             })
             .catch(error => {
-                console.log("Client error: " + error);
+                // console.log("Client error: " + error);
             })       
         })
         .catch(error => {
-            console.log(error);
-            console.log("Get events request failed");
+            // console.log(error);
+            // console.log("Get events request failed");
         });
 
     }, [infoClassName]);

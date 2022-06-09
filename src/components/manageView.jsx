@@ -24,7 +24,7 @@ export const ManageView = () => {
             }
         })
         .catch(error => {
-            console.log(error);
+            // console.log(error);
         });
     }, []);
 
@@ -42,7 +42,7 @@ export const ManageView = () => {
 
         })
         .catch(error => {
-            console.log(error)
+            // console.log(error);
         })
     }
 
