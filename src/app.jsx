@@ -15,7 +15,7 @@ import { ResultDelete } from './components/resultDelete';
 import { ResultEdit } from './components/resultEdit';
 import { ManageGame } from './components/manageGame';
 import { Matchtable } from './components/matchtable';
-
+import { MyUserForm } from './components/myUserForm';
 const baseURL = 'https://acetennis.herokuapp.com';
 
 export function App() {
@@ -39,6 +39,7 @@ export function App() {
             <Route path="/result_edit" element={<ResultEdit />} />
             <Route path="/manage_game" element={<ManageGame />} />
             <Route path="/matchtable" element={<Matchtable />} />
+            <Route path="/signup" element={<MyUserForm />} />
         </Routes>
       </BrowserRouter>
     </div>

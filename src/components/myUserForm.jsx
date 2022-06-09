@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const formClassName = "container border border-color-light-grey mx-auto p-4 pt-8 grid md:grid-cols-3 gap-4";
@@ -12,6 +13,7 @@ export const MyUserForm = () => {
     const {register, handleSubmit, watch, formState: {errors}} = useForm();
     const watchPassword = watch(["password", "password_confirmation"]);
     const passwordsMatch = watchPassword[0] == watchPassword[1];
+    const navigate = useNavigate();
 
     const onSubmit = (formData) => {
         if(!passwordsMatch) return;
@@ -25,22 +27,28 @@ export const MyUserForm = () => {
             },
             body: JSON.stringify(formData)
         })
-        .then(response => response.json())
         .then(response => {
-            if(response.status == 200) {
-                setStatus("Saved!")
-                // save jwt token
-                localStorage.setItem('TOKEN', res.token);
-                sessionStorage.setItem('isLogin', 'true');
-            } else {
-                setStatus("API Error!")
+            if(response.status == 409) {
+                setStatus("Username already exists.");
+                throw new Error(response.json());
+            } else if(response.status >= 400) {
+                throw new Error(response.json());
             }
+            
+            return response.json()
+        })
+        .then(response => {
+            setStatus("Saved!")
+            // save jwt token
+            localStorage.setItem('TOKEN', response.token);
+            sessionStorage.setItem('isLogin', 'true');
+            sessionStorage.setItem('username', response.username);
+            navigate('/dashboard', { replace: true });
         })
         .catch(error => {
-            setStatus("Client error: " + error);
+            setStatus("")
+            // setStatus("Client error: " + error);
         })
-
-        // console.log(formData);
     };
 
     return <form className={formClassName} onSubmit={handleSubmit(onSubmit)}>
