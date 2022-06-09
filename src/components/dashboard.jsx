@@ -35,7 +35,7 @@ export const Dashboard = () => {
     }, []);
 
     function getMatchInfo() {
-        fetch(`http://localhost:8081/event?month=&year=&date=`, {
+        fetch(`https://acetennis.herokuapp.com/event?month=&year=&date=`, {
             method: "GET",
             headers: {
                 'Content-Type': "application/json"

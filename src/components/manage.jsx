@@ -141,7 +141,7 @@ export const Manage = () => {
                             <span className='text-center text-sky-900 bg-sky-100 p-2'>Level : High</span>
                             <ul className={ulClassName}>
                                 {
-                                    playersH.map((player, index) => <li key={index}>{player.name}</li>)
+                                    !playersH && playersH.map((player, index) => <li key={index}>{player.name}</li>)
                                 }
                             </ul>
                         </div>
@@ -149,7 +149,7 @@ export const Manage = () => {
                             <span className='text-center text-sky-900 bg-sky-100 p-2'>Level : Middle</span>
                             <ul className={ulClassName}>
                                 {
-                                    playersM.map((player, index) => <li key={index}>{player.name}</li>)
+                                    !playersM && playersM.map((player, index) => <li key={index}>{player.name}</li>)
                                 }
                             </ul>
                         </div>
@@ -157,7 +157,7 @@ export const Manage = () => {
                             <span className='text-center text-sky-900 bg-sky-100 p-2'>Level : Low</span>
                             <ul className={ulClassName}>
                                 {
-                                    playersL.map((player, index) => <li key={index}>{player.name}</li>)
+                                    !playersL && playersL.map((player, index) => <li key={index}>{player.name}</li>)
                                 }
                             </ul>
                         </div>
