@@ -30,7 +30,13 @@ export const Create = () => {
                 'Content-Type': "application/json"
             },
         })
-        .then(res => res.json())
+        .then(res => {
+            if(res.status == 200) {
+                return res.json()
+            } else {
+                throw new Error(res.json());
+            }
+        }   )
         .then(res => {
             // check if upcoming event is already passed
             const eventDate = new Date(res.date);

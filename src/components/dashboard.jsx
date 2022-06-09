@@ -41,7 +41,13 @@ export const Dashboard = () => {
                 'Content-Type': "application/json"
             },
         })
-        .then(res => res.json())
+        .then(res => {
+            if(res.status == 200) {
+                return res.json()
+            } else {
+                throw new Error(res.json());
+            }
+        })
         .then(res => {
             const today = new Date();
             const eventDate = new Date(res.date);
@@ -102,6 +108,11 @@ export const Dashboard = () => {
         if(!isLogin || username != 'admin') {
             navigate('/', {replace: true});
             return;
+        }
+	
+	if(matchDate == undefined) {
+            navigate('/create');
+	    return;
         }
 
         if(isView) {
