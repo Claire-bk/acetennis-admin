@@ -26,7 +26,12 @@ export const Dashboard = () => {
         })
         .then(response => response.json())
         .then(response => {
-            setStatus(response.count);
+            let number = response.count -1;
+
+            if(number < 0) {
+                number = 0;
+            }
+            setStatus(number);
             getMatchInfo();
         })
         .catch(error => {
@@ -70,12 +75,13 @@ export const Dashboard = () => {
                 })
                 .catch(error => {
                     setView(false);
-                    console.log(error);
+                    // console.log(error);
                 });
             }
         })
         .catch(error => {
-            // console.log(error);
+            setView(false);
+            console.log(error);
         })
     }
 

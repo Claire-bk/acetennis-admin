@@ -70,7 +70,7 @@ export const ManageGame = () => {
                     setError('');
                 })
                 .catch(error => {
-                    console.log("Client error: " + error);
+                    // console.log("Client error: " + error);
                 })
         })
         navigate('/dashboard', { replace: true })
@@ -106,7 +106,7 @@ export const ManageGame = () => {
 
     function handleDeleteCourt() {
         const len = courtInfo.length;
-        console.log(selectedPlayers)
+        // console.log(selectedPlayers);
 
         if(len <= 1) {
             return;

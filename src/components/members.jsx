@@ -30,7 +30,11 @@ export const Members = () => {
             let members = response.filter(member => member.role !== 'admin')
             setMember(members);
             setFilter(members);
-            setStatus("");
+            if (members.length == 0) {
+                setStatus("No member");
+            } else {
+                setStatus("");
+            }
         })
         .catch(error => {
             // console.log("Client error: " + error);
@@ -77,7 +81,7 @@ export const Members = () => {
                     ))
                 }
             </ul>
-            <span>{status}</span>
+            <span className='block text-center text-4xl text-color-dark-pink'>{status}</span>
         </div>
     );
 };

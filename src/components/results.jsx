@@ -7,6 +7,7 @@ const listClassName = 'p-2  text-slate-500 hover:cursor-pointer';
 export const Results = () => {
     const navigate = useNavigate();
     const [matches, setMatches] = useState();
+    const [resMessage, setMessage] = useState();
 
     useEffect(() => {
         const isLogin = sessionStorage.getItem('isLogin');
@@ -29,6 +30,9 @@ export const Results = () => {
                     date:getFormatDate(new Date(match.date))
                     }
                 });
+            if (results.length == 0) {
+                setMessage("No match result");
+            }
             setMatches(results);
         })
         .catch(error => {
@@ -81,6 +85,7 @@ export const Results = () => {
                     // resultComp
                 }
             </ul>
+            <span className='block text-center text-4xl text-color-dark-pink'>{resMessage}</span>
         </>
     );
 };
