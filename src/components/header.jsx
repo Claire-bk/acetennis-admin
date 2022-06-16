@@ -26,7 +26,7 @@ export const Header = () => {
             </div>
             <ul className="navBar__menu flex">
                 <li className="p-2 text-white hover:text-fuchsia-600 hover:cursor-pointer" onClick={handleGoHome}>Home</li>
-                <li className="p-2 text-white hover:text-fuchsia-600 hover:cursor-pointer" onClick={handleSignup}>Signup</li>
+                {/* <li className="p-2 text-white hover:text-fuchsia-600 hover:cursor-pointer" onClick={handleSignup}>Signup</li> */}
                 <li className="p-2 text-white hover:text-fuchsia-600 hover:cursor-pointer" onClick={handleLogout}>Logout</li>
             </ul>        
         </header>
