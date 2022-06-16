@@ -15,7 +15,7 @@ export const Create = () => {
     const [eventId, setEventId] = useState();
     const navigate = useNavigate();
     const url = `https://acetennis.herokuapp.com/event?month=&year=&date=`;
-    const [btnText, setBtnText] = useState();
+    const [btnText, setBtnText] = useState("Create");
 
     useEffect(() => {
         const isLogin = sessionStorage.getItem('isLogin');
