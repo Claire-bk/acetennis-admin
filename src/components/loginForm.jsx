@@ -14,6 +14,14 @@ export const LoginForm = () => {
     const {register, handleSubmit, formState: {errors}} = useForm();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const isLogin = sessionStorage.getItem('isLogin');
+        if(isLogin == 'true') {
+            navigate("/dashboard", { replace: true });
+            return;
+        }
+    }, [])
+
     const onSubmit = (formData) => {
         setStatus("Loading...");
         
